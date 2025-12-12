@@ -11,6 +11,7 @@ git clone https://github.com/microsoft/unilm.git
 cd unilm/beit2
 pip install -r requirements.txt
 pip install -e .
+
 2. Teacher Model Dependencies (Optional)
 If you plan to use Open-CLIP and/or DINOv2 as teacher models:
 
