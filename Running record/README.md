@@ -1,1 +1,1 @@
-Running log for semantic segmentation and anomaly detection.
+Running log for unit segmentation and anomaly detection.
