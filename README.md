@@ -41,3 +41,5 @@ Our work builds upon and uses code from the following excellent open-source proj
 
 * **[BEiT-v2](https://github.com/microsoft/unilm/tree/7ae2ee53bf7fff85e730c72083b7e999b0b9ba44/beit2)**: We used their implementation as the foundation for our unit segmentation model (Stage 1).
 * **[Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL/tree/main/qwen-vl-finetune)**: Our anomaly detection MLLM is based on their fine-tuning code (Stage 2).
+* **[Open-clip](https://github.com/mlfoundations/open_clip))**: We used their implementation as the teacher model for our unit segmentation model (Stage 1).
+* **[DINOv2](https://github.com/facebookresearch/dinov2/tree/main/dinov2)**: We used their implementation as the teacher model for our unit segmentation model (Stage 1).
