@@ -1,6 +1,7 @@
 # A Semi-Supervised Multi-Stage Pipeline for Low-Resource Industrial Condition Monitoring
 
-This repository contains the official implementation code for the paper: **"A Semi-Supervised Multi-Stage Pipeline for Low-Resource Industrial Condition Monitoring by Injecting Domain Knowledge via Cross-Modal MLLM Fine-Tuning"**.
+This repository contains the official implementation code for the paper: **"A Semi-Supervised Multi-Stage Pipeline for Low-Resource Industrial Condition Monitoring by Injecting Domain Knowledge via Cross-Modal MLLM Fine-Tuning"**. The source code of this study
+will be publicly available upon publication of paper.
 
 ## ⚙️ Hyperparameters and Configuration
 
