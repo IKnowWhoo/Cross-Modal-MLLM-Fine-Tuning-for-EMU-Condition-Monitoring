@@ -1,6 +1,6 @@
 # Unit Segmentation for EMU Condition Monitoring
 
-This directory contains the visual model code for Electric Multiple Units (EMU) component segmentation and image-text pair generation. This module implements unsupervised unit segmentation via Masked Image Modeling (MIM) based on the BEiT-v2 framework, combined with a physics-informed knowledge base filter to generate descriptive prompts for downstream Multimodal Large Language Model (MLLM) fine-tuning.
+This directory contains the visual model code for Electric Multiple Units (EMU) unit segmentation and image-text pair generation. This module implements unsupervised unit segmentation via Masked Image Modeling (MIM) based on the BEiT-v2 framework, combined with a physics-informed knowledge base filter to generate descriptive prompts for downstream Multimodal Large Language Model (MLLM) fine-tuning.
 
 ## 🛠️ Installation Guide
 
@@ -33,11 +33,18 @@ Below are the command examples for the two-stage pre-training (visual tokenizer 
 This stage trains a tokenizer to encode EMU part images into discrete semantic codes.
 
 ```bash
-python -m torch.distributed.launch --nproc_per_node=8 run_vqkd_training.py \
-    --data_path /path/to/your/emu/dataset \
-    --output_dir /path/to/save/tokenizer \
-    --teacher_model clip \
-    --batch_size 64 \
-    --lr 5e-5 \
-    --epochs 100 \
-    --codebook_size 8192
+torchrun --nproc_per_node=8 run_vqkd_training.py  --data_set image_folder  --data_path /data1/beit2/train_data  --eval_data_path /data1/beit2/val_data  --output_dir /data1/beit2/vqkd_output1  --log_dir /data1/beit2/vqkd_output1  --process_type default  --train_interpolation bicubic  --min_crop_scale 0.08  --model vqkd_encoder_base_decoder_3x768x12_clip  --teacher_input_size 224  --codebook_n_emd 8192   --codebook_emd_dim 32  --quantize_kmeans_init  --rec_loss_type cosine  --batch_size 64  --opt adamw  --opt_betas 0.9 0.99  --weight_decay 1e-4   --warmup_epochs 10  --epochs 300  --save_ckpt_freq 20
+
+2. Stage 2: Masked Image Modeling (MIM) Pre-training
+In this stage, the vision model learns how individual parts assemble into complete units in an unsupervised manner by predicting the discrete codes of masked image patches.
+
+torchrun --nproc_per_node=8 run_beitv2_pretraining.py --data_set image_folder --data_path /data1/beit2/train_data --output_dir /data1/beit2/pretraining_output --log_dir /data1/beit2/pretraining_output --model beit_base_patch16_224_8k_vocab_cls_pt --shared_lm_head True --early_layers 9 --head_layers 2 --num_mask_patches 75 --second_input_size 224 --second_interpolation bicubic --min_crop_scale 0.2 --tokenizer_model vqkd_encoder_base_decoder_3x768x12_clip --tokenizer_weight /data1/beit2/vqkd_output2/checkpoint-299.pth --batch_size 128 --lr 7.5e-4 --warmup_epochs 10 --clip_grad 3.0 --drop_path 0. --layer_scale_init_value 0.1 --imagenet_default_mean_and_std --opt_betas 0.9 0.999 --opt_eps 1e-8  --epochs 300 --save_ckpt_freq 20 --init_ckpt /data1/beit2/beitv2_base_patch16_224_pt1k.pth --weight_decay 0.05
+
+3. Stage 3: Semantic Segmentation Fine-Tuning
+
+bash tools/dist_test.sh configs/beit/upernet/upernet_beit_base_12_512_slide_160k_21ktoade20k.py /data1/beit2/finetune5/iter_52000.pth 8 --launcher pytorch --format-only --out /data1/beit2/finetune5/fault_52000.pkl
+
+4. Prompt Generation
+After completing the segmentation inference, navigate to the semantic_segmentation directory to generate image-text pairs for MLLM fine-tuning by combining knowledge rules and clustering results.
+
+python generate_prompt.py --target-dirs /data1/beit2/cut1/target_cuts /data1/beit2/cut2/target_cuts  --background-dirs /data1/beit2/cut1/no_target /data1/beit2/cut2/no_target /data1/beit2/cut1/no_target --fault-dirs /data1/beit2/data/fault --cluster-dir /data1/beit2/feature/100text --manual-dirs /data1/beit2/cut1/air_duct /data1/beit2/cut1/wheel
