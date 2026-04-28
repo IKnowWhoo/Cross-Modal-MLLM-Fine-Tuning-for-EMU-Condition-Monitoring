@@ -54,7 +54,7 @@ torchrun --nproc_per_node=8 run_beitv2_pretraining.py --data_set image_folder --
 --opt_betas 0.9 0.999 --opt_eps 1e-8  --epochs 300 --save_ckpt_freq 20 \
 --init_ckpt /data1/beit2/beitv2_base_patch16_224_pt1k.pth --weight_decay 0.05
 ```
-### 3. Stage 3: Semantic Segmentation Fine-Tuning
+### 3. Stage 3: Semantic Segmentation Inference
 ```bash
 bash tools/dist_test.sh configs/beit/upernet/upernet_beit_base_12_512_slide_160k_21ktoade20k.py \
 /data1/beit2/finetune5/iter_52000.pth 8 --launcher pytorch --format-only \
