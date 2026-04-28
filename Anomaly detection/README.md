@@ -15,7 +15,7 @@ For model initialization, environment configuration, and the actual fine-tuning 
 ## 📂 Directory Contents & Pipeline Steps
 
 ### 1. Prompt Generation 
-Before fine-tuning, you must prepare the training corpus. The scripts in this module combine weak anomaly labels with cross-modal multi-domain clustering results to generate information-dense image-text pairs.
+Before fine-tuning, you must prepare the training corpus. The scripts in Unit segmentation/semantic_segmentation module combine weak anomaly labels with cross-modal multi-domain clustering results to generate information-dense image-text pairs.
 
 ### 2. MLLM Fine-Tuning 
 Use the combined dataset to fine-tune the MLLM using the official framework's instructions.
