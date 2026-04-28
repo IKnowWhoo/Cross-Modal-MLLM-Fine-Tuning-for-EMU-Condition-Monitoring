@@ -1,1 +1,1 @@
-Semantic segmentation code based on BEiT2.
+Semantic segmentation and post process logic code based on BEiT2.
