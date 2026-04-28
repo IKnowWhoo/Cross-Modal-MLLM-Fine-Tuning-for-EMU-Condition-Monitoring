@@ -34,7 +34,7 @@ This stage trains a tokenizer to encode EMU part images into discrete semantic c
 
 ```bash
 torchrun --nproc_per_node=8 run_vqkd_training.py  --data_set image_folder  --data_path /data1/beit2/train_data  --eval_data_path /data1/beit2/val_data  --output_dir /data1/beit2/vqkd_output1  --log_dir /data1/beit2/vqkd_output1  --process_type default  --train_interpolation bicubic  --min_crop_scale 0.08  --model vqkd_encoder_base_decoder_3x768x12_clip  --teacher_input_size 224  --codebook_n_emd 8192   --codebook_emd_dim 32  --quantize_kmeans_init  --rec_loss_type cosine  --batch_size 64  --opt adamw  --opt_betas 0.9 0.99  --weight_decay 1e-4   --warmup_epochs 10  --epochs 300  --save_ckpt_freq 20
-```bash
+```
 
 2. Stage 2: Masked Image Modeling (MIM) Pre-training
 In this stage, the vision model learns how individual parts assemble into complete units in an unsupervised manner by predicting the discrete codes of masked image patches.
